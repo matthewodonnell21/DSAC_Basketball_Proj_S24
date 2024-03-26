@@ -96,6 +96,8 @@ player_final
 
 player_names <- player_final |> 
   select(PLAYER_NAME)
+
+filter_choices <- data.frame("tidy_clutch", "FG_PCT", "PTS", "PF", "BLK", "STL", "TOV", "AST", "DREB", "OREB")
 ```
 
 
