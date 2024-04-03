@@ -2,6 +2,7 @@ library(shiny)
 library(tidyverse)
 library(hoopR)  
 library(tidymodels)
+library(shinythemes)
 
 filter_choices <- c("Clutch", "FG_PCT", "PTS", "PF", "BLK", "STL", "TOV", "AST", "DREB", "OREB")
 
@@ -9,7 +10,7 @@ year <- c("1996-97", "1997-98", "1998-99", "1999-00", "2000-01", "2001-02", "200
 
 excluded <- c("GROUP_SET", "PLAYER_NAME", "NICKNAME", "TEAM_ABBREVIATION")
 
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("darkly"),
   
   titlePanel("Clutch Players"),
   
@@ -53,17 +54,18 @@ server <- function(input, output) {
      rename(clutch_score = estimate))
   
    output$player_clutch <- renderTable({
-     final_data <- final()  # Evaluate the reactive expression to get the data frame
-     final_data <- final_data %>%
+     
+     final_data <- data.frame(final() |> 
        select(PLAYER_NAME, clutch_score, TEAM_ABBREVIATION, W, L, FG_PCT,
-              PTS, PF, BLK, STL, TOV, AST, DREB, OREB) %>%
+                                  PTS, PF, BLK, STL, TOV, AST, DREB, OREB) %>%
        rename(TEAM = TEAM_ABBREVIATION,
               Name = PLAYER_NAME,
               Clutch = clutch_score) %>%
        mutate(Clutch = Clutch * 100) %>%
-       arrange(desc(!!sym(input$filter)))
+       arrange(desc(!!sym(input$filter))))
      
      final_data
+       
    })
 
 }
