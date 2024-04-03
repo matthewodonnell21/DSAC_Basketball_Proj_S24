@@ -16,7 +16,7 @@ library(tidymodels)
 
 #import/tidy data
 
-clutch_data <- nba_leaguedashplayerclutch(season = year_to_season(2022))
+clutch_data <- nba_leaguedashplayerclutch(season = year_to_season(2017))
 
 clutch_data <- as.data.frame(clutch_data)
 
@@ -39,7 +39,7 @@ tidy_clutch <- clutch_data |>
 
 #team data cleaning to make win percentage prediction model
 
-team_clutch_data <- nba_leaguedashteamclutch(season = year_to_season(2022))
+team_clutch_data <- clutch_data
 
 team_clutch_data <- as.data.frame(team_clutch_data)
 
@@ -90,6 +90,8 @@ player_final <- clutch_scores |>
 
 player_final
 
+write.csv(player_final, "compare_stats/clutch2017.csv")
+
 ```
 
 ```{r}
@@ -98,4 +100,6 @@ player_names <- player_final |>
   select(PLAYER_NAME)
 
 filter_choices <- c("Clutch", "FG_PCT", "PTS", "PF", "BLK", "STL", "TOV", "AST", "DREB", "OREB")
+
+year <- c("1996-97", "1997-98", "1998-99", "1999-00", "2000-01", "2001-02", "2002-03", "2003-04", "2004-05", "2005-06", "2006-07", "2007-08", "2008-09", "2009-10", "2010-11", "2011-12", "2012-13", "2013-14", "2014-15", "2015-16", "2016-17", "2017-18", "2018-19", "2010-20", "2020-21", "2021-22", "2022-23", "2023-24")
 ```
