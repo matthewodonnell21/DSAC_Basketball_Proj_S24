@@ -15,7 +15,7 @@ The values below are the easiest to calculate. When a box score stat represents 
 - **Points Added From Turnover** = -**PPP**
 
 #### Rebounds
-We can quantify the value of a defensive rebound by viewing it as taking away the opponent's chance to regain possession. There is an **ORB%** chance that the opponent would get another posession, which are expected points a defensive rebound takes away. Similarly, the value of an offensive rebound can be quantified by viewing it as a possession extension. There is a **DRB%** chance the opponent will end the possession after a missed shot, which is value an offensive rebound adds back. 
+We can quantify the value of a defensive rebound by viewing it as taking away the opponent's chance to regain possession. There is an **ORB%** chance that the opponent would get another posession, which are expected points a defensive rebound takes away. Similarly, the value of an offensive rebound can be quantified by viewing it as a possession extension. There is a **DRB%** chance the opponent will end the possession after a missed shot, which is value an offensive rebound adds back. For rebounding rates, we will use the league-wide rates for a given season.
 - **Points Added From DRB** = **ORB%** * **PPP**
 - **Points Added From ORB** = **DRB%** * **PPP**
 
