@@ -1,6 +1,23 @@
 
 
 points.added.leaderboard = function(year = 2023, min.played = 0){
+  
+  if(year == "ALL"){
+    ret = NULL
+    for(i in 2002:2023){
+      cur = points.added.leaderboard(i, min.played) %>% 
+        mutate(Season = i)
+      ret = rbind(ret, cur)
+    }
+    ret = ret %>% select(Season, PLAYER_ID, PLAYER_NAME, 
+                         TEAM_ABBREVIATION, MIN, TOTAL.PA, PA.PER.MIN, PTS, 
+                         AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
+    
+    return(ret)
+    
+  }
+  
+  
   if(!(year %in% 2002:2023)){
     return(data.frame())
   }
@@ -28,7 +45,7 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
   PA_blk = ppp*drb.pct
   PA_TO = -ppp
   
-  season_totals = season_totals %>% mutate(totalPA = PA_2FGM*(FGM-FG3M) +
+  season_totals = season_totals %>% mutate(TOTAL.PA = PA_2FGM*(FGM-FG3M) +
                                PA_3FGM*FG3M + 
                                PA_FTM*FTM + 
                                PA_FG.miss*(FGA-FGM) + 
@@ -39,11 +56,11 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
                                PA_stls*STL +
                                PA_blk*BLK +
                                PA_TO*TOV,
-                               PA.per.min = totalPA / MIN)
+                               PA.PER.MIN = TOTAL.PA / MIN)
   
   season_totals = season_totals %>% 
-    select(PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, totalPA, PA.per.min, 
-           PTS, AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
+    select(PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, TOTAL.PA, 
+           PA.PER.MIN, PTS, AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
   
   return(season_totals)
   
