@@ -1,1 +1,14 @@
-# DSAC_Basketball_Proj_S24
+# Clutch Performance Analysis
+
+## Motivation
+
+## Methodology 1
+
+```{r}
+
+```
+
+## Methodology 2
+
+
+
