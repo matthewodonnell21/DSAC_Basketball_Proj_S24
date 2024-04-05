@@ -1,4 +1,4 @@
-totals = data.frame(nba_leaguedashplayerclutch(season = year_to_season(2022), per_mode = "Totals"))
+totals = data.frame(nba_leaguedashplayerclutch(season = year_to_season(2023), per_mode = "Totals"))
 
 ## Example weight calculation 
 ## weights taken from 2023-24 league averages 
