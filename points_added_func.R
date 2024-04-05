@@ -43,7 +43,7 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
   
   season_totals = season_totals %>% 
     select(PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, totalPA, PA.per.min, 
-           PTS, AST, OREB, DREB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
+           PTS, AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
   
   return(season_totals)
   

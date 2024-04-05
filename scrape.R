@@ -14,5 +14,6 @@ for(year in 2002:2023){
   file_path = paste("data/_", year, ".csv", sep = "")
   
   write.csv(clutch_totals, file = file_path)
+  
 }
 
