@@ -19,7 +19,8 @@ ui <- fluidPage(theme = shinytheme("darkly"),
       selectInput("filter", "Filter Data",
                   filter_choices),
       selectInput("year", "Choose Year",
-                  year)
+                  year),
+      numericInput("minutes", "Choose Minute Minimum", 0)
     ),
     mainPanel(
       tableOutput("player_clutch")
@@ -56,6 +57,7 @@ server <- function(input, output) {
    output$player_clutch <- renderTable({
      
      final_data <- data.frame(final() |> 
+       filter(MIN > input$minutes) |> 
        select(PLAYER_NAME, clutch_score, TEAM_ABBREVIATION, W, L, FG_PCT,
                                   PTS, PF, BLK, STL, TOV, AST, DREB, OREB) %>%
        rename(TEAM = TEAM_ABBREVIATION,
