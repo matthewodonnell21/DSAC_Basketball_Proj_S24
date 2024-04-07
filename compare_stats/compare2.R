@@ -30,33 +30,52 @@ ui <- fluidPage(theme = shinytheme("darkly"),
 
 server <- function(input, output) {
   
-   d1 <- reactive(nba_leaguedashplayerclutch(season = year_to_season(gsub(pattern = "-.*", replacement = "", x = input$year))) |> 
+  output$player_clutch <- renderTable({
+  
+    if(year == "ALL"){
+      ret = NULL
+      for(i in 1996:2023){
+        cur = points.added.leaderboard(i, min.played) %>% 
+          mutate(Season = i)
+        ret = rbind(ret, cur)
+      }
+      ret = ret %>% select(Season, PLAYER_ID, PLAYER_NAME, 
+                           TEAM_ABBREVIATION, MIN, TOTAL.PA, PA.PER.MIN, PTS, 
+                           AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
+      
+      return(ret)
+      
+    }
+    
+    if(!(input$year %in% 2002:2023)){
+    
+   d1 <- nba_leaguedashplayerclutch(season = year_to_season(gsub(pattern = "-.*", replacement = "", x = input$year))) |> 
                     as.data.frame() |> 
                     rename_with(.cols = everything(), .fn = ~gsub(pattern = "LeagueDashPlayerClutch.", replacement = "", x = .)) |> 
                     mutate_if(is.character, as.numeric) |> 
-                    select(-excluded))
+                    select(-excluded)
    
-   d2 <- reactive(nba_leaguedashplayerclutch(season = year_to_season(gsub(pattern = "-.*", replacement = "", x = input$year))) |>
+   d2 <- nba_leaguedashplayerclutch(season = year_to_season(gsub(pattern = "-.*", replacement = "", x = input$year))) |>
                     as.data.frame() |> 
                     rename_with(.cols = everything(), .fn = ~gsub(pattern = "LeagueDashPlayerClutch.", replacement = "", x = .)) |> 
                     mutate(PLAYER_ID = as.numeric(PLAYER_ID)) |>
                     select(PLAYER_ID, PLAYER_NAME, NICKNAME, TEAM_ABBREVIATION) |>
-                    left_join(d1(), join_by(PLAYER_ID)))
+                    left_join(d1, join_by(PLAYER_ID))
    
-   weights <- reactive(lm(W_PCT ~ FG_PCT + PTS + PF + BLK + STL + TOV + AST + DREB + OREB, data = d2()) |> 
+   weights <- reactive(lm(W_PCT ~ FG_PCT + PTS + PF + BLK + STL + TOV + AST + DREB + OREB, data = d2) |> 
                          tidy() |> 
                          slice(2:10) |> 
                          select(estimate) |> 
                          data.matrix())
    
-   final <- reactive(data.matrix(select(d2(), FG_PCT, PTS, PF, BLK, STL, TOV, AST, DREB, OREB)) %*% weights() |>
+   final <- data.matrix(select(d2, FG_PCT, PTS, PF, BLK, STL, TOV, AST, DREB, OREB)) %*% weights() |>
      as.data.frame() |> 
-     cbind(d2()) |> 
-     rename(clutch_score = estimate))
-  
-   output$player_clutch <- renderTable({
+     cbind(d2) |> 
+     rename(clutch_score = estimate)
      
-     final_data <- data.frame(final() |> 
+    }
+   
+     final_data <- data.frame(final |> 
        filter(MIN > input$minutes) |> 
        select(PLAYER_NAME, clutch_score, TEAM_ABBREVIATION, W, L, FG_PCT,
                                   PTS, PF, BLK, STL, TOV, AST, DREB, OREB) %>%
@@ -69,7 +88,7 @@ server <- function(input, output) {
      final_data
        
    })
-
+  
 }
 
 shinyApp(ui = ui, server = server)
