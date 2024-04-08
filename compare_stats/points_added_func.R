@@ -4,9 +4,9 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
   
   if(year == "ALL"){
     ret = NULL
-    for(i in 2002:2023){
-      cur = points.added.leaderboard(i, min.played) %>% 
-        mutate(Season = i)
+    for(i in 1996:2023){
+      cur = points.added.leaderboard(i, min.played)
+      
       ret = rbind(ret, cur)
     }
     ret = ret %>% select(Season, PLAYER_ID, PLAYER_NAME, 
@@ -18,15 +18,15 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
   }
   
   
-  if(!(year %in% 2002:2023)){
+  if(!(year %in% 1996:2023)){
     return(data.frame())
   }
   
-  file_path = paste("data/_", year, ".csv", sep = "")
+  file_path = paste("compare_stats/data/_", year, ".csv", sep = "")
   season_totals = read.csv(file_path) %>% filter(MIN > min.played)
   
-  season_ratings = read.csv("data/pp_data.csv") %>% 
-    filter(Season == year %% 2000)
+  season_ratings = read.csv("compare_stats/data/per_possession_data.csv") %>% 
+    filter(Season == year)
   
   ppp = season_ratings$ppp
   orb.pct = season_ratings$orb.pct
@@ -58,8 +58,10 @@ points.added.leaderboard = function(year = 2023, min.played = 0){
                                PA_TO*TOV,
                                PA.PER.MIN = TOTAL.PA / MIN)
   
+  season_totals = season_totals %>% mutate(Season = year)
+  
   season_totals = season_totals %>% 
-    select(PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, TOTAL.PA, 
+    select(Season, PLAYER_ID, PLAYER_NAME, TEAM_ABBREVIATION, MIN, TOTAL.PA, 
            PA.PER.MIN, PTS, AST, REB, BLK, STL, TOV, FG_PCT, FG3_PCT, FT_PCT)
   
   return(season_totals)
