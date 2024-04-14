@@ -35,6 +35,8 @@ This weighted-points-added system for box score stats has many drawbacks. First 
 
 ## Methodology 2
 
+Our second method seeks to evaluate player performance in clutch time by evaluating each statistical contribution's correlation with the win percentage of a player. This is accomplished by fitting a linear model to assign weights to each statistic. The linear model that was fit models win percentage using players' field goal percentage, points scored, personal fouls, blocks, steals, turnovers, assists, defensive rebounds, and offensive rebounds. The weights that are calculated take into account only players from the given year, and thus vary from year to year as scoring and other statistics fluctuate. Once the weights are calculated, a final clutch statistic for each player is created by multiplying the data in matrix form with the vector of weights.
+
 ## RShiny App
 
 
