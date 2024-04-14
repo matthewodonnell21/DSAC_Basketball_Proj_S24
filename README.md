@@ -39,5 +39,5 @@ Our second method seeks to evaluate player performance in clutch time by evaluat
 
 ## RShiny App
 
-
+A link to our RShiny application that allows for comparison between players using these calculations can be found here: https://logan-godfrey.shinyapps.io/compare_stats/
 
