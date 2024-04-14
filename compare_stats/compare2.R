@@ -137,12 +137,13 @@ server <- function(input, output) {
              Clutch = clutch_score) %>%
       mutate(Clutch = Clutch * 100) %>%
       left_join(leaderboard_data, by = c("PLAYER_ID", "Season")) |> 
-      filter(MIN > input$minutes) %>%
-      arrange(desc(!!sym(input$filter))) |> 
       select(Name, Season, Team, Clutch, PA.PER.MIN, MIN, 
-             PTS, AST, OREB, DREB, BLK, STL, TOV, FG_PCT)
+             PTS, AST, OREB, DREB, BLK, STL, TOV, FG_PCT) |> 
+      mutate(Season = as.integer(Season))
     
-    final
+    final |> 
+      filter(MIN > input$minutes) %>%
+      arrange(desc(!!sym(input$filter)))
     
   })
   
